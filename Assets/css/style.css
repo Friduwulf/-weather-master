@@ -39,9 +39,11 @@ body {
     font-size: medium;
 }
 
-.prevSearch {
-    background-color: rgb(158, 157, 157);
-    padding-left: 0;
+#prevSearch {
+    background-color: rgb(133, 131, 131);
+    width: 15rem;
+    height: 2rem;
+    margin-top: 0.3rem;
 }
 
 .breakLine {
@@ -92,4 +94,10 @@ body {
 .weatherIcon {
     max-height: 3rem;
     max-width: 3rem;
+}
+
+#pastWeatherList {
+    list-style: none;
+    padding: 0;
+    margin-top: 0.3rem;
 }

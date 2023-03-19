@@ -7,13 +7,36 @@ var currentTemp = document.getElementById("currentTemp");
 var currentHumidity = document.getElementById("currentHumidity");
 var currentWind = document.getElementById("currentWind");
 var today = dayjs().format("MM/DD/YYYY");
-//Event listener for the search button
-cityButton.addEventListener("click", function() {
-    console.log("button clicked");
-    console.log(cityInput.value);
-    newFetch(cityInput.value)
+var citiesSavedArr = [];
+
+//Standard view on page load
+window.addEventListener("load", function (event) {
+    cityInput.value = 'Fredericton';
+    newFetch();
 });
 
+//Event listener for the search button
+cityButton.addEventListener("click", function(event) {
+    event.preventDefault();
+    console.log("button clicked");
+    console.log(cityInput.value);
+    var city = cityInput.value.trim();
+    console.log(citiesSavedArr);
+    //Prevent duplicate searches saved, if not duplicate, add to array
+    if (citiesSavedArr.includes(city)) {
+        return;
+    } else {
+    citiesSavedArr.push(city);
+    init();
+    searchedCities();
+    newFetch();
+    }
+});
+
+//stores the searched cities in local storage
+function init() {
+    localStorage.setItem("cities", JSON.stringify(citiesSavedArr));
+}
 
 //Fetch Request From API, Returns JSON of Weather for City
 function newFetch() {
@@ -76,135 +99,19 @@ function newFetch() {
             $('#6Humidity').text('Humidity: ' + data.list[39].main.humidity + '%'); 
             $('#6Wind').text('Wind: ' + data.list[39].wind.speed + 'KPH');
         })
+};
+//creates buttons for previously searched cities, re-searches city when button clicked
+function searchedCities() {
+    var citiesEl = $('<li>');
+    var cittiesButton = $('<button>');
+
+    cittiesButton.attr('id', 'prevSearch');
+    cittiesButton.addClass('btn', 'list-group-item');
+    cittiesButton.text(cityInput.value);
+    citiesEl.append(cittiesButton);
+    $('#pastWeatherList').prepend(citiesEl);
+    $('#prevSearch').on('click', function() {
+        cityInput.value = $(this).text();
+        newFetch();
+    });
 }
-//         .then(function(res) {
-//             console.log(res.json());
-//             if(!res.ok) {
-//                 throw res.json();
-//             }
-//             return res.json();
-//         })
-//         .then(function(data) {
-//             console.log(data);
-//             getWeatherData(data);
-//         })
-//         .catch(function() {
-//             cityInput.value = "";
-//             alert("Please enter a valid city");
-//         });
-//         saveCity();
-// }
-
-// function saveCity() {
-//     if (Object.values(localStorage).includes(cityInput)) {
-//         return;
-//     } else if (cityInput === "null") {
-//         alert("Please Enter A City");
-//         return;
-//     } else {
-//         var city = cityInput.value;
-//         var idSetter = Object.keys(localStorage).length+1;
-//         localStorage.setItem(idSetter, city);
-//     }
-// }
-
-// function storeData(storeData) {
-//     if (storeData == cityInput.value) {
-//         var city = cityInput.value;
-//     } else {
-//         var city = storeData;
-//     }
-//     var idSetter = Object.keys(localStorage).length+1;
-//     localStorage.setItem(idSetter, city);
-//     var newPrevSearch = document.createElement("button");
-//     newPrevSearch.setAttribute("id", city);
-//     newPrevSearch.setAttribute("class", "prevSearch btn");
-//     newPrevSearch.innerHTML = city;
-
-//     if (!pastWeatherList.querySelector(city)) 
-//        pastWeatherList.appendChild(newPrevSearch);
-//        newPrevSearch.addEventListener("click", function(event) {
-//         newFetch(event.target.id); 
-//     })
-//     console.log(city);
-// }
-
-// function createPrevSearch(storeData) {
-//     var idSetter = Object.keys(localStorage).length+1;
-//     localStorage.setItem(idSetter, city);
-//     var newPrevSearch = document.createElement("button");
-//     newPrevSearch.setAttribute("id", city);
-//     newPrevSearch.setAttribute("class", "prevSearch btn");
-//     newPrevSearch.innerHTML = city;
-
-//     if (!pastWeatherList.querySelector(city)) 
-//        pastWeatherList.appendChild(newPrevSearch);
-//        newPrevSearch.addEventListener("click", function(event) {
-//         newFetch(event.target.id); 
-//     })
-// }
-
-// function getPastWeather() {
-//     if (localStorage) {
-//         var keys = Object.keys(localStorage);
-//         var i = keys.length;
-
-//         while (i--) {
-//             if(localStorage.getItem(keys[i]) != "") {
-//                 var data = (localStorage.getItem(keys[i]));
-//                 // storeData(data);
-//                 createPrevSearch(data);
-//             }
-//         }
-//         pastWeatherList.addEventListener("click", function() {
-//             if (!pastWeatherList.querySelector(`${cityInput.value}`))
-//             pastWeather.append(pastWeatherButton);
-//         });
-//     }
-// };
-
-// function getWeatherData(storeData) {
-//     pastWeather.innerHTML = "";
-//     newFetch(storeData);
-//     localStorage.clear();
-// };
-
-// function forcast (weekForcast) {
-//     var currentEl = document.getElementById("current");
-//     var currentTitleEl = document.createElement("h3");
-//     var currentWeather = document.createElement("article");
-//     var weekTitleEl = document.createElement("h3");
-//     var forcastWeather = document.createElement("article");
-//     currentTitleEl.innerHTML = "";
-//     currentEl.innerHTML = "";
-//     currentWeather.setAttribute("class", "todayforcast");
-//     currentTitleEl.innerHTML = (weekForcast.city.name + ", " + weekForcast.city.country);
-//     currentWeather.innerHTML = (`<img src= https://openweathermap.org/img/wn/${weekForecast.list[i].weather[0].icon 
-//         + "@2x.png"} ></img>` 
-//         + "<br>Day/Time: " 
-//         + weekForecast.list[i].dt_txt 
-//         + "<br> Temp: " 
-//         + weekForecast.list[i].main.temp 
-//         + "<br> Wind speed: " 
-//         + weekForecast.list[i].wind.speed)
-//     currentEl.appendChild(currentTitleEl);
-//     currentEl.appendChild(currentWeather);
-//     pastWeather.innerHTML = "";
-//     weekTitleEl.innerHTML = "Weekly Weather Brief: ";
-//     pastWeather.appendChild(weekTitleEl);
-//     for (var i = 0; i < weekForcast.list.length; i + 8) {
-//         forcastWeather.setAttribute("class", "forcast");
-//         forcastWeather.innerHTML = (`<img src= https://openweathermap.org/img/wn/${weekForecast.list[i].weather[0].icon 
-//             + "@2x.png"} ></img>` 
-//             + "<br>Day/Time: " 
-//             + weekForecast.list[i].dt_txt 
-//             + "<br> Temp: " 
-//             + weekForecast.list[i].main.temp 
-//             + "<br> Wind speed: " 
-//             + weekForecast.list[i].wind.speed)
-//         pastWeather.append(weekWeather);
-
-//     }
-// }
-
-// getPastWeather();
