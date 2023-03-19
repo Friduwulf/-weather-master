@@ -1,0 +1,95 @@
+:root {
+    --mainColor: rgb(81, 118, 218)
+}
+
+body {
+    font-family: 'Montserrat';
+}
+
+.banner {
+    background-color: var(--mainColor);
+    color: white;
+}
+
+.button {
+    margin-top: 0.5rem;
+    height: 2rem;
+    width: 15rem;
+    text-align: center;
+}
+
+#input {
+    float: left;
+    width: 25%;
+    margin:0.3rem;
+    height: 100%
+}
+
+#searchTitle {
+    max-height: 2rem;
+    max-width: 15rem;
+    padding-top: 0.4rem
+}
+
+#cityInput {
+    width: 15rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    border: 1px solid grey;
+    font-size: medium;
+}
+
+.prevSearch {
+    background-color: rgb(158, 157, 157);
+    padding-left: 0;
+}
+
+.breakLine {
+    color: grey;
+}
+
+#cityButton {
+    background-color: rgb(96, 159, 231);
+    color: white;
+}
+
+.card {
+    background-color: var(--mainColor);
+    color: white;
+    font-weight: 500;
+}
+
+#currentWeather {
+    margin: 0rem;
+    float: right;
+    padding: 0;
+    width: 70%;
+    height: 13rem;
+}
+
+#forcastContainer {
+    display: flex;
+    flex-direction: row;
+    float: right;
+    width: 100%;
+    height: 20rem;
+    margin: 0;
+}
+
+#forcast {
+    float: right;
+    width: 70%;
+    height: 10rem;
+    margin-top: 0.6rem;
+}
+
+.forcastCard {
+    margin: 0.3rem;
+    height: 13rem;
+    font-size: small;;
+}
+
+.weatherIcon {
+    max-height: 3rem;
+    max-width: 3rem;
+}
